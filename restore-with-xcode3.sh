@@ -30,7 +30,7 @@ if [ ! -d "$XCODE4/Applications/XCode.app" ]; then
   exit 0
 fi
 
-cd "$XCODE4"
+pushd "$XCODE4" > /dev/null
 
 # Restore 10.4/10.5 SDK Support
 for VER in "10.5" "10.4u"; do
@@ -47,7 +47,7 @@ sudo ln -s "$XCODE3/Library/Xcode/Plug-ins/GCC 4.0.xcplugin" \
 # Restore PPC support for GCC 4.2 (both XCode and CL)
 ULG=usr/libexec/gcc
 PAD10=powerpc-apple-darwin10
-for DIR in "$XCODE4" ""; do
+for DIR in "$XCODE4"; do
   cd "$DIR"
   sudo ln -sf "$XCODE3/$ULG/$PAD10" "$ULG/$PAD10"
   sudo ln -sf "$XCODE3/usr/lib/gcc/$PAD10" "usr/lib/gcc/$PAD10"
@@ -62,3 +62,5 @@ done
 
 # "edit" the architecture list
 source `dirname $0`/arch-change.sh
+
+popd > /dev/null
