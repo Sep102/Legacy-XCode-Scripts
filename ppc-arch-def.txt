@@ -1,0 +1,10 @@
+{
+  Type = Architecture;
+  Identifier = ppc;
+  Name = "Minimal (32-bit PowerPC only)";
+  Description = "32-bit PowerPC";
+  PerArchBuildSettingName = "PowerPC";
+  ByteOrder = big;
+  ListInEnum = No;
+  SortNumber = 201
+}

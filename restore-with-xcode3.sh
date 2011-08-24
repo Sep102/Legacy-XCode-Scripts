@@ -60,7 +60,24 @@ for DIR in "$XCODE4"; do
   fi
 done
 
-# "edit" the architecture list
-source `dirname $0`/arch-change.sh
+# Add some text to XCode's architecture list so it appears in the interface, please
+# I'm too lazy to script it...
+cat "$(dirname $0)/ppc-arch-def.txt" | pbcopy
+
+echo Almost done. Now paste this in the right place in your editor
+echo It has been copied to your clipboard for your convenience
+
+cd "$XCODE4/Platforms/MacOSX.platform/Developer/Library/Xcode/Specifications"
+XCSPEC="MacOSX Architectures.xcspec"
+if [[ -n "$PS1" || $SHLVL -gt 1 ]]; then
+	read -p "Press enter to continue..."
+	[[ -n "$EDITOR" && -n $(which "$EDITOR") ]] && "$EDITOR" "$XCSPEC" ||
+		(which vim && vim "$XCSPEC") || 
+		open -e "./$XCSPEC"
+else
+	(which mate && mate "$XCSPEC") ||
+		(which bbedit && bbedit "$XCSPEC") ||
+		open -e "$XCSPEC"
+fi
 
 popd > /dev/null
