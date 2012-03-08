@@ -45,20 +45,21 @@ sudo ln -s "$XCODE3/Library/Xcode/Plug-ins/GCC 4.0.xcplugin" \
   "Library/Xcode/PrivatePlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Xcode/Plug-ins"
 
 # Restore PPC support for GCC 4.2 (both XCode and CL)
-ULG=usr/libexec/gcc
+ULG=usr/lib/gcc
+ULXG=usr/libexec/gcc
 PAD10=powerpc-apple-darwin10
-for DIR in "$XCODE4"; do
-  cd "$DIR"
-  sudo ln -sf "$XCODE3/$ULG/$PAD10" "$ULG/$PAD10"
-  sudo ln -sf "$XCODE3/usr/lib/gcc/$PAD10" "usr/lib/gcc/$PAD10"
-  cd "$ULG/$PAD10/$GCCVER"
-  if [ -h as ]; then
-    echo "Didn't replace 'as' because it is already a link."
-  else
-    sudo mv as as.bak
-    sudo ln -s "$XCODE3/usr/bin/as" .
-  fi
-done
+
+sudo mkdir -p "$ULXG"
+sudo ln -sf "$XCODE3/$ULXG/$PAD10" "$ULXG/$PAD10"
+
+pushd "$ULXG/$PAD10/$GCCVER" > /dev/null
+if [ -h as ]; then
+	echo "Didn't replace 'as' because it is already a link."
+else
+	sudo mv as as.bak
+	sudo ln -s "$XCODE3/usr/bin/as" .
+fi
+popd > /dev/null
 
 # Add some text to XCode's architecture list so it appears in the interface, please
 # I'm too lazy to script it...
